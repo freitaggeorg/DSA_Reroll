@@ -6,6 +6,7 @@ import router from "./router";
 import { store } from "./store";
 
 import "./sass/main.scss";
+import "vue-material-design-icons/styles.css";
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;

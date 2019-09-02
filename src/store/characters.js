@@ -1,5 +1,5 @@
 const state = {
-  characters: ["01"]
+  characters: []
 };
 
 const mutations = {

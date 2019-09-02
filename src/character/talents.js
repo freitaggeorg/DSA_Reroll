@@ -1,4 +1,4 @@
-export const talents = [
+export default [
   {
     name: "Körpertalente",
     subTalents: [
@@ -84,5 +84,3 @@ export const talents = [
     ]
   }
 ];
-
-export const attributes = [];
