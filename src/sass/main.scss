@@ -1,0 +1,15 @@
+// import bootstrap scss
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+// variables
+$base-color: #1f1f1f;
+$base-font-color: rgba(255, 255, 255, 0.719);
+
+
+// styles
+.pnp-col {
+    min-width: 200px;
+    max-width: 300px;
+    border: 1px solid red;
+}

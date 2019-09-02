@@ -2,6 +2,11 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
     <HelloWorld msg="Welcome to Your Vue.js App" />
+    <b-row>
+      <b-col class="pnp-col">
+        test
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -10,7 +15,7 @@
 import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
-  name: "home",
+  name: "Home",
   components: {
     HelloWorld
   }
