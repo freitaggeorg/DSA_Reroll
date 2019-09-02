@@ -4,7 +4,7 @@ const state = {
 
 const mutations = {
   pushCharacter(state, character) {
-    state.character.push(character);
+    state.characters.push(character);
   }
 };
 
