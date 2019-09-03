@@ -42,7 +42,7 @@
             label-cols-lg="3"
           >
             <b-form-input
-              v-model="talents[index2 - 1]"
+              v-model="talents[talent.index]"
               style="width: auto;"
               type="number"
               max="20"
@@ -72,7 +72,8 @@ export default {
       fixedAttributes: fixedAttributes,
       fixedTalents: [],
       attributes: [],
-      talents: []
+      talents: [],
+      tIndex: 0
     };
   },
   mounted() {
