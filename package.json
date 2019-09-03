@@ -12,6 +12,7 @@
     "bootstrap-vue": "^2.0.0-rc.28",
     "core-js": "^2.6.9",
     "lodash": "^4.17.15",
+    "random-js": "^2.1.0",
     "vue": "^2.6.10",
     "vue-material-design-icons": "^3.4.0",
     "vue-router": "^3.0.3",

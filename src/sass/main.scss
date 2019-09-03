@@ -18,13 +18,37 @@ $base-font-color: rgba(255, 255, 255, 0.719);
 }
 
 .head-row-attributes {
-    min-width: 150px;
+    min-width: 250px;
 }
 
 .head-row-characters {
     display: flex;
     flex-direction: row;
-    .character-name {
-        min-width: 100px;
+}
+
+.character-name {
+    min-width: 100px;
+}
+
+.result-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.character-result-row {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+
+.talent-group {
+    border-top: 1px solid rgba(0,0,0, 0.7);
+    margin-top: 30px;
+    &:first-child {
+        margin-top: 0;
     }
+}
+
+.talent-group-name {
+    font-weight: bold;
 }
