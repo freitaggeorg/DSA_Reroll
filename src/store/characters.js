@@ -8,7 +8,7 @@ const state = {
   selectedCharacter: null,
   activeCharacters: activeCharsFromLocalStorage
     ? activeCharsFromLocalStorage
-    : {}
+    : []
 };
 
 const mutations = {
@@ -32,7 +32,8 @@ const mutations = {
   deleteAll(state) {
     state.activeCharacters = [];
     state.characters = [];
-    updateLocalStorage(state);
+    localStorage.removeItem("chars");
+    localStorage.removeItem("activeChars");
   }
 };
 
