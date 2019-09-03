@@ -1,11 +1,17 @@
 <template>
   <b-container>
     <h1>Probewürfe</h1>
-    <b-row>
-      <b-col v-for="char in characters" :key="char.name + index">
-        <div>{{ char.name ? char.name : "" }}</div>
-      </b-col>
-    </b-row>
+    <div class="head-row">
+      <div class="head-row-attributes">Attribute</div>
+      <div class="head-row-characters">
+        <div v-for="(char, index) in characters" :key="char.name + index">
+          <div v-if="activeCharacters[index]" class="character-name">
+            {{ char.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
     <b-row>
       <b-col><b-button>Wurf</b-button></b-col>
     </b-row>
@@ -26,15 +32,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { mapActions } from "vuex";
+// import { mapActions } from "vuex";
 
 export default {
   name: "Home",
   computed: {
-    ...mapGetters("characters", ["characters"])
+    ...mapGetters("characters", ["characters", "activeCharacters"])
   },
   methods: {
-    ...mapActions("characters", ["addCharacter"])
+    // ...mapActions("characters", ["addCharacter"])
   }
 };
 </script>

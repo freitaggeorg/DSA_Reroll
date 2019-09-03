@@ -7,10 +7,19 @@
           {{ char.name }}
         </b-col>
         <b-col>
+          <div
+            :style="{ color: activeCharacters[index] ? 'green' : 'red' }"
+            @click="toggleCharacter(index)"
+          >
+            <ToggleOnIcon v-if="activeCharacters[index]" />
+            <ToggleOffIcon v-else />
+          </div>
+        </b-col>
+        <b-col>
           <ExportIcon />
         </b-col>
         <b-col>
-          <DeleteIcon />
+          <DeleteIcon @click="requestDelete(index)" />
         </b-col>
       </b-row>
     </div>
@@ -19,6 +28,9 @@
         <router-link to="/newcharacter" tag="button">
           Neuen Character erstellen
         </router-link>
+      </b-col>
+      <b-col>
+        <b-button @click="deleteAllCharacters">Delete all</b-button>
       </b-col>
     </b-row>
     <b-row style="margin-top: 100px;">
@@ -36,18 +48,31 @@ import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 import ExportIcon from "vue-material-design-icons/ExportVariant";
 import DeleteIcon from "vue-material-design-icons/Delete";
+import ToggleOnIcon from "vue-material-design-icons/ToggleSwitch";
+import ToggleOffIcon from "vue-material-design-icons/ToggleSwitchOff";
 
 export default {
   name: "Home",
   components: {
     ExportIcon,
-    DeleteIcon
+    DeleteIcon,
+    ToggleOnIcon,
+    ToggleOffIcon
   },
   computed: {
-    ...mapGetters("characters", ["characters"])
+    ...mapGetters("characters", ["characters", "activeCharacters"])
   },
   methods: {
-    ...mapActions("characters", ["addCharacter"])
+    ...mapActions("characters", [
+      "selectCharacter",
+      "deleteSelectedCharacter",
+      "toggleCharacter",
+      "deleteAllCharacters"
+    ]),
+    async requestDelete(index) {
+      await this.selectCharacter(index);
+      await this.deleteSelectedCharacter();
+    }
   }
 };
 </script>

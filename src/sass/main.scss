@@ -8,8 +8,23 @@ $base-font-color: rgba(255, 255, 255, 0.719);
 
 
 // styles
-.pnp-col {
-    min-width: 200px;
-    max-width: 300px;
-    border: 1px solid red;
+.head-row {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.head-row-attributes {
+    min-width: 150px;
+}
+
+.head-row-characters {
+    display: flex;
+    flex-direction: row;
+    .character-name {
+        min-width: 100px;
+    }
 }
