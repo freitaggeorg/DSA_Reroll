@@ -2,10 +2,10 @@
   <b-container>
     <h1>Probewürfe</h1>
     <b-row>
-      <b-col><b-button @click="rollDice">Wurf</b-button></b-col>
+      <b-col><b-button @click="newRoll">Würfeln</b-button></b-col>
     </b-row>
     <div class="head-row">
-      <div class="head-row-attributes" style="text-align: left">Attribute</div>
+      <div class="head-row-attributes" style="text-align: left"></div>
       <div class="head-row-characters">
         <div v-for="(char, index) in characters" :key="char.name + index">
           <div v-if="activeCharacters[index]" class="character-name">
@@ -13,6 +13,36 @@
           </div>
           <div>
             {{ rolls[index] }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="head-row">
+      <div class="head-row-attributes" style="text-align: left">
+        <b-form-group label="Modifikator" label-cols-sm="6" label-cols-lg="4">
+          <b-form-input
+            v-model="modificator"
+            :formatter="modificatorFormat"
+            type="number"
+            max="10"
+            min="-10"
+            placeholder="0"
+            style="width: auto;"
+          ></b-form-input>
+        </b-form-group>
+      </div>
+      <div class="head-row-characters">
+        <div v-for="(char, index) in characters" :key="char.name + index">
+          <div v-if="activeCharacters[index]" class="character-name">
+            <b-form-input
+              v-model="singleMod[index]"
+              :formatter="modificatorFormat"
+              type="number"
+              max="10"
+              min="-10"
+              placeholder="0"
+              style="width: auto;"
+            ></b-form-input>
           </div>
         </div>
       </div>
@@ -75,6 +105,12 @@ export default {
     CheckIcon,
     CancelIcon
   },
+  data() {
+    return {
+      modificator: 0,
+      singleMod: []
+    };
+  },
   computed: {
     ...mapGetters("characters", [
       "characters",
@@ -83,8 +119,26 @@ export default {
       "results"
     ])
   },
+  mounted() {
+    for (let i = 0; i < this.characters.length; i++) {
+      this.singleMod.push(0);
+    }
+  },
   methods: {
-    ...mapActions("characters", ["rollDice"])
+    ...mapActions("characters", ["rollDice"]),
+    modificatorFormat(value) {
+      let rv = parseInt(value);
+      if (isNaN(rv)) return 0;
+      else if (rv < -10) return -10;
+      else if (rv > 10) return 10;
+      else return rv;
+    },
+    newRoll() {
+      this.rollDice({
+        globalMod: this.modificator,
+        singleModArray: this.singleMod
+      });
+    }
   }
 };
 </script>

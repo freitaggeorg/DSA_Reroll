@@ -48,7 +48,7 @@ const mutations = {
   addRolls(state, { index, rolls }) {
     state.rolls.splice(index, 1, rolls);
   },
-  updateResults(state) {
+  updateResults(state, { globalMod, singleModArray }) {
     state.results = [];
     for (let v = 0; v < talents.length; v++) {
       state.results.push({
@@ -69,14 +69,16 @@ const mutations = {
           charIndex < state.characters.length;
           charIndex++
         ) {
-          // calculate results
           // attribute 1 vs roll 1
           let c1 =
             parseInt(
               state.characters[charIndex].attributes[
                 talents[v].subTalents[i].attributes[0]
               ]
-            ) - state.rolls[charIndex][0];
+            ) +
+            globalMod +
+            parseInt(singleModArray[charIndex]) -
+            state.rolls[charIndex][0];
 
           // attribute 2 vs roll 2
           let c2 =
@@ -84,7 +86,10 @@ const mutations = {
               state.characters[charIndex].attributes[
                 talents[v].subTalents[i].attributes[1]
               ]
-            ) - state.rolls[charIndex][1];
+            ) +
+            globalMod +
+            parseInt(singleModArray[charIndex]) -
+            state.rolls[charIndex][1];
 
           // attribute 3 vs roll 3
           let c3 =
@@ -92,7 +97,10 @@ const mutations = {
               state.characters[charIndex].attributes[
                 talents[v].subTalents[i].attributes[2]
               ]
-            ) - state.rolls[charIndex][2];
+            ) +
+            globalMod +
+            parseInt(singleModArray[charIndex]) -
+            state.rolls[charIndex][2];
 
           // success?
           const pointsToSpend = parseInt(
@@ -161,14 +169,20 @@ const actions = {
       resolve();
     });
   },
-  rollDice({ commit, state }) {
+  rollDice({ commit, state }, { globalMod, singleModArray }) {
     return new Promise(async (resolve, reject) => {
       try {
         for (let i = 0; i < state.characters.length; i++) {
           const rolls = await roll();
-          commit("addRolls", { index: i, rolls: rolls });
+          commit("addRolls", {
+            index: i,
+            rolls: rolls
+          });
         }
-        commit("updateResults");
+        commit("updateResults", {
+          globalMod: parseInt(globalMod),
+          singleModArray: singleModArray
+        });
         resolve();
       } catch (e) {
         reject(e);
