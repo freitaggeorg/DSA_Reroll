@@ -1,6 +1,7 @@
 <template>
   <b-container>
-    <h1>Character Erstellung</h1>
+    <h1 v-if="selectedCharIndex === null">Character Erstellung</h1>
+    <h1 v-else>Character bearbeiten</h1>
     <div>
       <b-form-group label="Name" label-cols-sm="4" label-cols-lg="3">
         <b-form-input
@@ -34,6 +35,7 @@
         >
           <b-form-input
             v-model="attributes[index]"
+            :formatter="format"
             type="number"
             max="20"
             min="0"
@@ -63,6 +65,7 @@
           >
             <b-form-input
               v-model="talents[talent.index]"
+              :formatter="format"
               style="width: auto;"
               type="number"
               max="20"
@@ -87,7 +90,7 @@
 <script>
 import fixedTalents from "../character/talents";
 import fixedAttributes from "../character/attributes";
-// import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 import SaveIcon from "vue-material-design-icons/ContentSave";
 
@@ -106,16 +109,40 @@ export default {
       talents: []
     };
   },
+  computed: {
+    ...mapGetters("characters", ["selectedCharIndex", "selectedCharacter"])
+  },
   mounted() {
-    // this.fixedTalents = fixedTalents;
-    // let allTalents = [];
-    // for (let i = 0; i < fixedTalents.length; i++) {
-    //   allTalents = allTalents.concat(fixedTalents[i].subTalents);
-    // }
-    //  this.fixedTalents = allTalents;
+    // check for selected
+    if (this.selectedCharIndex === null) {
+      // console.info("New Character");
+      // none selected, load defaults
+      for (let i = 0; i < this.fixedAttributes.length; i++) {
+        this.attributes.push(0);
+      }
+      for (let i = 0; i < this.fixedTalents.length; i++) {
+        for (let j = 0; j < this.fixedTalents[i].subTalents.length; j++) {
+          this.talents.push(0);
+        }
+      }
+    } else {
+      // console.info("Loading...");
+      this.name = this.selectedCharacter.name;
+      this.handicap = this.selectedCharacter.handicap;
+      for (let i = 0; i < this.fixedAttributes.length; i++) {
+        this.attributes.push(this.selectedCharacter.attributes[i]);
+      }
+      let index = 0;
+      for (let i = 0; i < this.fixedTalents.length; i++) {
+        for (let j = 0; j < this.fixedTalents[i].subTalents.length; j++) {
+          this.talents.push(this.selectedCharacter.talents[index]);
+          index++;
+        }
+      }
+    }
   },
   methods: {
-    ...mapActions("characters", ["saveCharacter"]),
+    ...mapActions("characters", ["saveCharacter", "selectCharacter"]),
     async buildAndSaveChar() {
       if (this.name !== "") {
         // build our character structure
@@ -130,6 +157,13 @@ export default {
         await this.saveCharacter(char);
         this.$router.push("/characters");
       }
+    },
+    format(value) {
+      let rv = parseInt(value);
+      if (isNaN(rv)) return 0;
+      else if (rv < 0) return 0;
+      else if (rv > 20) return 20;
+      else return rv;
     }
   }
 };

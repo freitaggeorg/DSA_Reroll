@@ -3,7 +3,7 @@
     <h1>Character Verwaltung</h1>
     <div v-for="(char, index) in characters" :key="char.name + index">
       <b-row>
-        <b-col>
+        <b-col @click="selectAndEdit(index)">
           {{ char.name }}
         </b-col>
         <b-col>
@@ -62,6 +62,9 @@ export default {
   computed: {
     ...mapGetters("characters", ["characters", "activeCharacters"])
   },
+  mounted() {
+    this.selectCharacter(null);
+  },
   methods: {
     ...mapActions("characters", [
       "selectCharacter",
@@ -72,6 +75,10 @@ export default {
     async requestDelete(index) {
       await this.selectCharacter(index);
       await this.deleteSelectedCharacter();
+    },
+    async selectAndEdit(index) {
+      await this.selectCharacter(index);
+      this.$router.push("/newcharacter");
     }
   }
 };

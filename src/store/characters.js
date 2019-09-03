@@ -5,7 +5,7 @@ const activeCharsFromLocalStorage = JSON.parse(
 
 const state = {
   characters: charsFromLocalStorage ? charsFromLocalStorage : [],
-  selectedCharacter: null,
+  selectedCharIndex: null,
   activeCharacters: activeCharsFromLocalStorage
     ? activeCharsFromLocalStorage
     : []
@@ -18,11 +18,15 @@ const mutations = {
     updateLocalStorage(state);
   },
   updateSelected(state, index) {
-    state.selectedCharacter = index;
+    state.selectedCharIndex = index;
+  },
+  updateSelectedCharacter(state, character) {
+    state.characters[state.selectedCharIndex] = character;
+    updateLocalStorage(state);
   },
   deleteSelected(state) {
-    state.characters.splice(state.selectedCharacter, 1);
-    state.activeCharacters.splice(state.selectedCharacter, 1);
+    state.characters.splice(state.selectedCharIndex, 1);
+    state.activeCharacters.splice(state.selectedCharIndex, 1);
     updateLocalStorage(state);
   },
   changeActiveCharacter(state, index) {
@@ -38,9 +42,14 @@ const mutations = {
 };
 
 const actions = {
-  saveCharacter({ commit }, character) {
+  saveCharacter({ commit, state }, character) {
     return new Promise(resolve => {
-      commit("pushCharacter", character);
+      if (state.selectedCharIndex === null) {
+        commit("pushCharacter", character);
+      } else {
+        commit("updateSelectedCharacter", character);
+      }
+      commit("updateSelected", null);
       resolve();
     });
   },
@@ -76,6 +85,12 @@ const getters = {
   },
   activeCharacters: state => {
     return state.activeCharacters;
+  },
+  selectedCharIndex: state => {
+    return state.selectedCharIndex;
+  },
+  selectedCharacter: state => {
+    return state.characters[state.selectedCharIndex];
   }
 };
 
