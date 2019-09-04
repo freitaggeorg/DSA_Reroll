@@ -208,6 +208,14 @@ const actions = {
         reject(e);
       }
     });
+  },
+  importCharacters({ commit }, characterArray) {
+    return new Promise(resolve => {
+      for (let i = 0; i < characterArray.length; i++) {
+        commit("pushCharacter", characterArray[i]);
+      }
+      resolve();
+    });
   }
 };
 

@@ -83,7 +83,12 @@
         >
       </b-col>
       <b-col>
-        <b-button @click="showExport = true"><ExportIcon /></b-button>
+        <b-button @click="showExport = true"
+          >Exportieren <ExportIcon />
+        </b-button>
+        <b-button @click="showImport = true">
+          Importieren <ImportIcon />
+        </b-button>
       </b-col>
     </b-row>
     <b-row style="margin-top: 100px;">
@@ -107,6 +112,20 @@
         <b-button @click="showExport = false">Schließen</b-button>
       </div>
     </div>
+    <div v-if="showImport" class="export-div">
+      <div class="click-background" @click="showImport = false"></div>
+      <div class="export-window">
+        <b-form-textarea
+          id="export-input"
+          v-model="importText"
+          placeholder="Paste export here"
+          rows="10"
+          no-resize
+        ></b-form-textarea>
+        <b-button @click="startImport">Importieren</b-button>
+        <b-button @click="showImport = false">Schließen</b-button>
+      </div>
+    </div>
   </b-container>
 </template>
 
@@ -119,6 +138,7 @@ import ToggleOnIcon from "vue-material-design-icons/ToggleSwitch";
 import ToggleOffIcon from "vue-material-design-icons/ToggleSwitchOff";
 import EditIcon from "vue-material-design-icons/Pencil";
 import CancelIcon from "vue-material-design-icons/Cancel";
+import ImportIcon from "vue-material-design-icons/CloudDownloadOutline";
 
 export default {
   name: "Home",
@@ -128,13 +148,16 @@ export default {
     ToggleOnIcon,
     ToggleOffIcon,
     EditIcon,
-    CancelIcon
+    CancelIcon,
+    ImportIcon
   },
   data() {
     return {
       confirmDelete: null,
       confirmDeleteAll: false,
-      showExport: false
+      showExport: false,
+      showImport: false,
+      importText: ""
     };
   },
   computed: {
@@ -152,7 +175,8 @@ export default {
       "selectCharacter",
       "deleteSelectedCharacter",
       "toggleCharacter",
-      "deleteAllCharacters"
+      "deleteAllCharacters",
+      "importCharacters"
     ]),
     async requestDelete(index) {
       await this.selectCharacter(index);
@@ -166,11 +190,15 @@ export default {
       this.confirmDeleteAll = false;
       this.deleteAllCharacters();
     },
-    copyToClipboard() {
+    async copyToClipboard() {
       let copyText = document.querySelector("#export-input");
       copyText.select();
       document.execCommand("copy");
       // console.log(response);
+    },
+    async startImport() {
+      await this.importCharacters(JSON.parse(this.importText));
+      this.showImport = false;
     }
   }
 };
