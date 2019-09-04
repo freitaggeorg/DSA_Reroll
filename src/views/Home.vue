@@ -10,7 +10,14 @@
       </b-col>
     </b-row>
     <div class="head-row">
-      <div class="head-row-attributes" style="text-align: left"></div>
+      <div class="head-row-attributes" style="text-align: left">
+        <b-form-input
+          v-model="searchTerm"
+          type="text"
+          placeholder="Search..."
+          style="width: auto;"
+        ></b-form-input>
+      </div>
       <div class="head-row-characters">
         <div v-for="(char, index) in characters" :key="char.name + index">
           <div v-if="activeCharacters[index]" class="character-name">
@@ -66,7 +73,7 @@
     </div>
     <div>
       <div
-        v-for="talentGroup in results"
+        v-for="talentGroup in filteredResults(searchTerm)"
         :key="talentGroup.name"
         class="talent-group"
       >
@@ -156,7 +163,8 @@ export default {
     return {
       modifier: 0,
       singleMod: [],
-      enableHandicap: []
+      enableHandicap: [],
+      searchTerm: ""
     };
   },
   computed: {
@@ -164,17 +172,18 @@ export default {
       "characters",
       "activeCharacters",
       "rolls",
-      "results"
+      "results",
+      "filteredResults"
     ]),
     criticalRoll: function() {
       let criticalArray = [];
       for (let i = 0; i < this.rolls.length; i++) {
-        let dublicate = this.rolls[i].filter(function(value, index, self) {
+        let duplicate = this.rolls[i].filter(function(value, index, self) {
           return self.indexOf(value) !== index;
         });
-        if (dublicate.length > 0) {
-          if (dublicate[0] === 20) criticalArray.push(20);
-          else if (dublicate[0] === 1) criticalArray.push(1);
+        if (duplicate.length > 0) {
+          if (duplicate[0] === 20) criticalArray.push(20);
+          else if (duplicate[0] === 1) criticalArray.push(1);
           else criticalArray.push(0);
         } else {
           criticalArray.push(0);

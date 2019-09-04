@@ -228,6 +228,24 @@ const getters = {
   },
   results: state => {
     return state.results;
+  },
+  filteredResults: state => term => {
+    if (term !== "") {
+      let filtered = JSON.parse(JSON.stringify(state.results));
+      let i = filtered.length;
+      while (i--) {
+        let j = filtered[i].subTalents.length;
+        while (j--) {
+          if (!filtered[i].subTalents[j].name.toLowerCase().includes(term)) {
+            filtered[i].subTalents.splice(j, 1);
+          }
+        }
+        if (filtered[i].subTalents.length === 0) filtered.splice(i, 1);
+      }
+      return filtered;
+    } else {
+      return state.results;
+    }
   }
 };
 
