@@ -25,7 +25,7 @@
     </div>
     <b-row>
       <b-col>
-        <router-link to="/newcharacter" tag="button">
+        <router-link to="/newcharacter" tag="button" class="btn btn-secondary">
           Neuen Character erstellen
         </router-link>
       </b-col>
@@ -35,7 +35,7 @@
     </b-row>
     <b-row style="margin-top: 100px;">
       <b-col>
-        <router-link to="/" tag="button">
+        <router-link to="/" tag="button" class="btn btn-secondary">
           Zurück
         </router-link>
       </b-col>

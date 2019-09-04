@@ -19,6 +19,7 @@ $base-font-color: rgba(255, 255, 255, 0.719);
 
 .head-row-attributes {
     min-width: 250px;
+    text-align: left;
 }
 
 .head-row-characters {
@@ -33,6 +34,9 @@ $base-font-color: rgba(255, 255, 255, 0.719);
 .result-row {
     display: flex;
     flex-direction: row;
+    &.colored {
+        background-color: rgba(0, 0, 0, 0.03);
+    }
 }
 
 .character-result-row {
@@ -51,4 +55,18 @@ $base-font-color: rgba(255, 255, 255, 0.719);
 
 .talent-group-name {
     font-weight: bold;
+}
+
+.success {
+    background-color: rgba(0, 255, 0, 0.1);
+    &.critical {
+        background-color: rgba(0, 255, 0, 0.2);
+    }
+}
+
+.fail {
+    background-color: rgba(255, 0, 0, 0.1);
+    &.critical {
+        background-color: rgba(255, 0, 0, 0.2);
+    }
 }

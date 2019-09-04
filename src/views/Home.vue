@@ -23,8 +23,8 @@
       </div>
     </div>
     <div class="head-row">
-      <div class="head-row-attributes" style="text-align: left">
-        <b-form-group label="Modifikator" label-cols-sm="6" label-cols-lg="4">
+      <div class="head-row-attributes">
+        <b-form-group label="Modifikator" label-cols-sm="6" label-cols-lg="6">
           <b-form-input
             v-model="modificator"
             :formatter="modificatorFormat"
@@ -75,9 +75,10 @@
         </div>
         <div>
           <div
-            v-for="talent in talentGroup.subTalents"
+            v-for="(talent, r) in talentGroup.subTalents"
             :key="talent.name"
             class="result-row"
+            :class="{ colored: r % 2 === 0 }"
           >
             <div class="head-row-attributes">
               {{ talent.name }}
@@ -89,24 +90,29 @@
                 class="character-name"
               >
                 <div v-if="criticalRoll[index] !== 0">
-                  <div v-if="criticalRoll[index] === 1">
+                  <div
+                    v-if="criticalRoll[index] === 1"
+                    class="success critical"
+                  >
                     <DoubleCheckIcon title="" />
                   </div>
-                  <div v-else><CloseIcon title="" /><CloseIcon title="" /></div>
+                  <div v-else class="fail critical">
+                    <CloseIcon title="" /><CloseIcon title="" />
+                  </div>
                 </div>
                 <div v-else-if="!enableHandicap[index]">
-                  <div v-if="roll.success">
+                  <div v-if="roll.success" class="success">
                     <CheckIcon title="" />
                   </div>
-                  <div v-else>
+                  <div v-else class="fail">
                     <CancelIcon title="" />
                   </div>
                 </div>
                 <div v-else>
-                  <div v-if="roll.successH">
+                  <div v-if="roll.successH" class="success">
                     <CheckIcon title="" />
                   </div>
-                  <div v-else>
+                  <div v-else class="fail">
                     <CancelIcon title="" />
                     <HelpCircle v-if="roll.handicapLevel === 2" />
                   </div>
