@@ -37,6 +37,11 @@ $base-font-color: rgba(255, 255, 255, 0.719);
     &.colored {
         background-color: rgba(0, 0, 0, 0.03);
     }
+
+    &.centered {
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .character-result-row {
@@ -68,5 +73,8 @@ $base-font-color: rgba(255, 255, 255, 0.719);
     background-color: rgba(255, 0, 0, 0.1);
     &.critical {
         background-color: rgba(255, 0, 0, 0.2);
+    }
+    &.handicap {
+        background-color: rgba(0, 0, 255, 0.1);
     }
 }

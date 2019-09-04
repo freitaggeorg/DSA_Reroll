@@ -48,7 +48,7 @@ const mutations = {
   addRolls(state, { index, rolls }) {
     state.rolls.splice(index, 1, rolls);
   },
-  updateResults(state, { globalMod, singleModArray }) {
+  updateResults(state, singleModArray) {
     state.results = [];
     for (let v = 0; v < talents.length; v++) {
       state.results.push({
@@ -80,9 +80,7 @@ const mutations = {
               state.characters[charIndex].attributes[
                 talents[v].subTalents[i].attributes[0]
               ]
-            ) +
-            globalMod +
-            parseInt(singleModArray[charIndex]);
+            ) + parseInt(singleModArray[charIndex]);
           let a1h = a1 + handicap;
 
           let c1 = a1 - state.rolls[charIndex][0];
@@ -94,9 +92,7 @@ const mutations = {
               state.characters[charIndex].attributes[
                 talents[v].subTalents[i].attributes[1]
               ]
-            ) +
-            globalMod +
-            parseInt(singleModArray[charIndex]);
+            ) + parseInt(singleModArray[charIndex]);
           let a2h = a2 + handicap;
 
           let c2 = a2 - state.rolls[charIndex][1];
@@ -108,9 +104,7 @@ const mutations = {
               state.characters[charIndex].attributes[
                 talents[v].subTalents[i].attributes[2]
               ]
-            ) +
-            globalMod +
-            parseInt(singleModArray[charIndex]);
+            ) + parseInt(singleModArray[charIndex]);
           let a3h = a3 + handicap;
           let c3 = a3 - state.rolls[charIndex][2];
           let c3h = a3h - state.rolls[charIndex][2];
@@ -143,6 +137,7 @@ const mutations = {
             successRateH: successH,
             pointsToSpend: pointsToSpend,
             quality: quality,
+            qualityH: qualityH,
             handicapLevel: talents[v].subTalents[i].handicap,
             handicap: handicap,
             c1: c1,
@@ -196,7 +191,7 @@ const actions = {
       resolve();
     });
   },
-  rollDice({ commit, state }, { globalMod, singleModArray }) {
+  rollDice({ commit, state }, singleModArray) {
     return new Promise(async (resolve, reject) => {
       try {
         for (let i = 0; i < state.characters.length; i++) {
@@ -206,10 +201,7 @@ const actions = {
             rolls: rolls
           });
         }
-        commit("updateResults", {
-          globalMod: parseInt(globalMod),
-          singleModArray: singleModArray
-        });
+        commit("updateResults", singleModArray);
         resolve();
       } catch (e) {
         reject(e);

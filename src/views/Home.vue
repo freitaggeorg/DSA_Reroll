@@ -24,10 +24,10 @@
     </div>
     <div class="head-row">
       <div class="head-row-attributes">
-        <b-form-group label="Modifikator" label-cols-sm="6" label-cols-lg="6">
+        <b-form-group label="Modifier" label-cols-sm="6" label-cols-lg="6">
           <b-form-input
-            v-model="modificator"
-            :formatter="modificatorFormat"
+            v-model="modifier"
+            :formatter="modifierFormat"
             type="number"
             max="10"
             min="-10"
@@ -41,7 +41,7 @@
           <div v-if="activeCharacters[index]" class="character-name">
             <b-form-input
               v-model="singleMod[index]"
-              :formatter="modificatorFormat"
+              :formatter="modifierFormat"
               type="number"
               max="10"
               min="-10"
@@ -101,20 +101,28 @@
                   </div>
                 </div>
                 <div v-else-if="!enableHandicap[index]">
-                  <div v-if="roll.success" class="success">
+                  <div v-if="roll.success" class="result-row centered success">
                     <CheckIcon title="" />
+                    <QualityNumber :value="roll.quality" />
                   </div>
-                  <div v-else class="fail">
+                  <div v-else class="result-row centered fail">
                     <CancelIcon title="" />
+                    <QualityNumber :value="roll.quality" />
                   </div>
                 </div>
                 <div v-else>
-                  <div v-if="roll.successH" class="success">
+                  <div v-if="roll.successH" class="result-row centered success">
                     <CheckIcon title="" />
+                    <QualityNumber :value="roll.qualityH" />
                   </div>
-                  <div v-else class="fail">
+                  <div
+                    v-else
+                    class="result-row centered fail"
+                    :class="{ handicap: roll.handicapLevel === 2 }"
+                  >
                     <CancelIcon title="" />
-                    <HelpCircle v-if="roll.handicapLevel === 2" />
+                    <!-- <HelpCircle v-if="roll.handicapLevel === 2" /> -->
+                    <QualityNumber :value="roll.qualityH" />
                   </div>
                 </div>
               </div>
@@ -132,8 +140,9 @@ import { mapActions } from "vuex";
 import CheckIcon from "vue-material-design-icons/Check";
 import DoubleCheckIcon from "vue-material-design-icons/CheckAll";
 import CancelIcon from "vue-material-design-icons/Cancel";
-import HelpCircle from "vue-material-design-icons/HelpCircleOutline";
+// import HelpCircle from "vue-material-design-icons/HelpCircleOutline";
 import CloseIcon from "vue-material-design-icons/Close";
+import QualityNumber from "../components/QualityNumber";
 
 export default {
   name: "Home",
@@ -141,12 +150,13 @@ export default {
     CheckIcon,
     DoubleCheckIcon,
     CancelIcon,
-    HelpCircle,
-    CloseIcon
+    // HelpCircle,
+    CloseIcon,
+    QualityNumber
   },
   data() {
     return {
-      modificator: 0,
+      modifier: 0,
       singleMod: [],
       enableHandicap: []
     };
@@ -175,6 +185,13 @@ export default {
       return criticalArray;
     }
   },
+  watch: {
+    modifier: function(val) {
+      for (let i = 0; i < this.singleMod.length; i++) {
+        this.singleMod[i] = val;
+      }
+    }
+  },
   mounted() {
     for (let i = 0; i < this.characters.length; i++) {
       this.singleMod.push(0);
@@ -183,7 +200,7 @@ export default {
   },
   methods: {
     ...mapActions("characters", ["rollDice"]),
-    modificatorFormat(value) {
+    modifierFormat(value) {
       let rv = parseInt(value);
       if (isNaN(rv)) return 0;
       else if (rv < -10) return -10;
@@ -191,10 +208,7 @@ export default {
       else return rv;
     },
     newRoll() {
-      this.rollDice({
-        globalMod: this.modificator,
-        singleModArray: this.singleMod
-      });
+      this.rollDice(this.singleMod);
     }
   }
 };
