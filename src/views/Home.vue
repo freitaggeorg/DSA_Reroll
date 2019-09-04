@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div class="head-row">
+    <div class="head-row" style="margin-bottom: 0;">
       <div class="head-row-attributes">
         <b-form-group label="Modifier" label-cols-sm="6" label-cols-lg="6">
           <b-form-input
@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div class="head-row">
+    <div class="head-row" style="margin-top: 0;">
       <div class="head-row-attributes">
         Handicap
       </div>
@@ -100,17 +100,16 @@
                     <CloseIcon title="" /><CloseIcon title="" />
                   </div>
                 </div>
-                <div v-else-if="!enableHandicap[index]">
+                <div v-else-if="!enableHandicap[index]" class="max-height">
                   <div v-if="roll.success" class="result-row centered success">
                     <CheckIcon title="" />
                     <QualityNumber :value="roll.quality" />
                   </div>
                   <div v-else class="result-row centered fail">
                     <CancelIcon title="" />
-                    <QualityNumber :value="roll.quality" />
                   </div>
                 </div>
-                <div v-else>
+                <div v-else class="max-height">
                   <div v-if="roll.successH" class="result-row centered success">
                     <CheckIcon title="" />
                     <QualityNumber :value="roll.qualityH" />
@@ -122,7 +121,6 @@
                   >
                     <CancelIcon title="" />
                     <!-- <HelpCircle v-if="roll.handicapLevel === 2" /> -->
-                    <QualityNumber :value="roll.qualityH" />
                   </div>
                 </div>
               </div>

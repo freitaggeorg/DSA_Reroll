@@ -39,7 +39,6 @@ $base-font-color: rgba(255, 255, 255, 0.719);
     }
 
     &.centered {
-        align-items: center;
         justify-content: center;
     }
 }
@@ -71,10 +70,15 @@ $base-font-color: rgba(255, 255, 255, 0.719);
 
 .fail {
     background-color: rgba(255, 0, 0, 0.1);
+    height: 100%;
     &.critical {
         background-color: rgba(255, 0, 0, 0.2);
     }
     &.handicap {
         background-color: rgba(0, 0, 255, 0.1);
     }
+}
+
+.max-height {
+    height: 100%;
 }
