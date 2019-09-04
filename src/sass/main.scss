@@ -25,6 +25,9 @@ $base-font-color: rgba(255, 255, 255, 0.719);
 .head-row-characters {
     display: flex;
     flex-direction: row;
+    .action {
+        min-width: 100px;
+    }
 }
 
 .character-name {
@@ -80,5 +83,50 @@ $base-font-color: rgba(255, 255, 255, 0.719);
 }
 
 .max-height {
+    height: 100%;
+}
+
+.characters {
+    font-size: 1.2rem;
+}
+
+.edit-icon {
+    :hover {
+        cursor: pointer;
+        color: rgb(255, 179, 2)
+    }
+}
+
+.delete-icon {
+    color: red;
+    :hover {
+        cursor: pointer;
+        color: aqua;
+    }
+}
+
+.export-div {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9995
+}
+
+.export-window {
+    min-width: 400px;
+    max-width: 600px;
+    z-index: 10005
+}
+
+.click-background {
+    z-index: 10000;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100%;
     height: 100%;
 }

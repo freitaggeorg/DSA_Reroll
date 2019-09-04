@@ -33,6 +33,7 @@ const mutations = {
   deleteSelected(state) {
     state.characters.splice(state.selectedCharIndex, 1);
     state.activeCharacters.splice(state.selectedCharIndex, 1);
+    state.selectedCharIndex = null;
     updateLocalStorage(state);
   },
   changeActiveCharacter(state, index) {
@@ -213,6 +214,9 @@ const actions = {
 const getters = {
   characters: state => {
     return state.characters;
+  },
+  exportCharacters: state => {
+    return JSON.stringify(state.characters);
   },
   activeCharacters: state => {
     return state.activeCharacters;
