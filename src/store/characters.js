@@ -248,7 +248,11 @@ const getters = {
       while (i--) {
         let j = filtered[i].subTalents.length;
         while (j--) {
-          if (!filtered[i].subTalents[j].name.toLowerCase().includes(term)) {
+          if (
+            !filtered[i].subTalents[j].name
+              .toLowerCase()
+              .includes(term.toLowerCase())
+          ) {
             filtered[i].subTalents.splice(j, 1);
           }
         }
