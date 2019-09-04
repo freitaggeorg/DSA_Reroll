@@ -3,6 +3,11 @@
     <h1>Probewürfe</h1>
     <b-row>
       <b-col><b-button @click="newRoll">Würfeln</b-button></b-col>
+      <b-col>
+        <router-link to="/characters" tag="button" class="btn btn-secondary">
+          Charactere verwalten
+        </router-link>
+      </b-col>
     </b-row>
     <div class="head-row">
       <div class="head-row-attributes" style="text-align: left"></div>
@@ -47,6 +52,18 @@
         </div>
       </div>
     </div>
+    <div class="head-row">
+      <div class="head-row-attributes">
+        Handicap
+      </div>
+      <div class="head-row-characters">
+        <div v-for="(char, index) in characters" :key="char.name + index">
+          <div v-if="activeCharacters[index]" class="character-name">
+            <b-form-checkbox v-model="enableHandicap[index]"> </b-form-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
     <div>
       <div
         v-for="talentGroup in results"
@@ -71,11 +88,28 @@
                 :key="talent.name + characters[index].name"
                 class="character-name"
               >
-                <div v-if="roll.success">
-                  <CheckIcon title="" />
+                <div v-if="criticalRoll[index] !== 0">
+                  <div v-if="criticalRoll[index] === 1">
+                    <DoubleCheckIcon title="" />
+                  </div>
+                  <div v-else><CloseIcon title="" /><CloseIcon title="" /></div>
+                </div>
+                <div v-else-if="!enableHandicap[index]">
+                  <div v-if="roll.success">
+                    <CheckIcon title="" />
+                  </div>
+                  <div v-else>
+                    <CancelIcon title="" />
+                  </div>
                 </div>
                 <div v-else>
-                  <CancelIcon title="" />
+                  <div v-if="roll.successH">
+                    <CheckIcon title="" />
+                  </div>
+                  <div v-else>
+                    <CancelIcon title="" />
+                    <HelpCircle v-if="roll.handicapLevel === 2" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -83,13 +117,6 @@
         </div>
       </div>
     </div>
-    <b-row style="margin-top: 100px;">
-      <b-col>
-        <router-link to="/characters" tag="button">
-          Charactere verwalten
-        </router-link>
-      </b-col>
-    </b-row>
   </b-container>
 </template>
 
@@ -97,18 +124,25 @@
 import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 import CheckIcon from "vue-material-design-icons/Check";
+import DoubleCheckIcon from "vue-material-design-icons/CheckAll";
 import CancelIcon from "vue-material-design-icons/Cancel";
+import HelpCircle from "vue-material-design-icons/HelpCircleOutline";
+import CloseIcon from "vue-material-design-icons/Close";
 
 export default {
   name: "Home",
   components: {
     CheckIcon,
-    CancelIcon
+    DoubleCheckIcon,
+    CancelIcon,
+    HelpCircle,
+    CloseIcon
   },
   data() {
     return {
       modificator: 0,
-      singleMod: []
+      singleMod: [],
+      enableHandicap: []
     };
   },
   computed: {
@@ -117,11 +151,28 @@ export default {
       "activeCharacters",
       "rolls",
       "results"
-    ])
+    ]),
+    criticalRoll: function() {
+      let criticalArray = [];
+      for (let i = 0; i < this.rolls.length; i++) {
+        let dublicate = this.rolls[i].filter(function(value, index, self) {
+          return self.indexOf(value) !== index;
+        });
+        if (dublicate.length > 0) {
+          if (dublicate[0] === 20) criticalArray.push(20);
+          else if (dublicate[0] === 1) criticalArray.push(1);
+          else criticalArray.push(0);
+        } else {
+          criticalArray.push(0);
+        }
+      }
+      return criticalArray;
+    }
   },
   mounted() {
     for (let i = 0; i < this.characters.length; i++) {
       this.singleMod.push(0);
+      this.enableHandicap.push(true);
     }
   },
   methods: {
