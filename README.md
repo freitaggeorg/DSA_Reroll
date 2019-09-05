@@ -1,26 +1,28 @@
 # dsa_mastertool
+This project was created with [Vue CLI](https://cli.vuejs.org/).
+You need to install it first:
+```
+npm install -g @vue/cli
+```
 
 ## Project setup
+After cloning the project you need to install the dependencies.
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+After that you can do the following:
+#### Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+#### Compiles and minifies for production
 ```
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
+#### Lints and fixes files
 ```
 npm run lint
 ```
