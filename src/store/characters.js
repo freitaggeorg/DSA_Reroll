@@ -126,9 +126,9 @@ const mutations = {
             (c2h > 0 ? 0 : c2h) +
             (c3h > 0 ? 0 : c3h);
 
-          let quality = Math.ceil(success % 3);
+          let quality = Math.ceil(success / 3);
           if (quality <= 0) quality = 1;
-          let qualityH = Math.ceil(successH % 3);
+          let qualityH = Math.ceil(successH / 3);
           if (qualityH <= 0) qualityH = 1;
 
           let obj = {
