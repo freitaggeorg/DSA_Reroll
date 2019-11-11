@@ -1,5 +1,6 @@
 import roll from "../character/dice";
 import talents from "../character/talents";
+//import { async } from "q";
 // import attributes from "../character/attributes";
 
 const charsFromLocalStorage = JSON.parse(localStorage.getItem("chars"));
@@ -192,6 +193,15 @@ const actions = {
       resolve();
     });
   },
+  addRolls({ commit }, rolls, index) {
+    return new Promise(async resolve => {
+      commit("addRolls", {
+        index: index,
+        rolls: rolls
+      });
+      resolve();
+    });
+  },
   rollDice({ commit, state }, singleModArray) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -207,6 +217,12 @@ const actions = {
       } catch (e) {
         reject(e);
       }
+    });
+  },
+  updateResults({ commit }, singleModArray) {
+    return new Promise(async resolve => {
+      commit("updateResults", singleModArray);
+      resolve();
     });
   },
   importCharacters({ commit }, characterArray) {
@@ -237,6 +253,13 @@ const getters = {
   },
   rolls: state => {
     return state.rolls;
+  },
+  rollsAsString: state => {
+    let value = [];
+    for (let i = 0; i < state.rolls.length; i++) {
+      value[i] = state.rolls[i].toString();
+    }
+    return value;
   },
   results: state => {
     return state.results;

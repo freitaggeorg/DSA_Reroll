@@ -24,7 +24,12 @@
             {{ char.name }}
           </div>
           <div>
-            {{ rolls[index] }}
+            <b-form-input
+              :value="rollsAsString[index]"
+              type="text"
+              onclick="this.select()"
+              @keydown.enter="changeRolls(index, $event)"
+            ></b-form-input>
           </div>
         </div>
       </div>
@@ -35,11 +40,12 @@
           <b-form-input
             v-model="modifier"
             :formatter="modifierFormat"
-            type="number"
-            max="10"
-            min="-10"
+            type="text"
+            onclick="this.select()"
             placeholder="0"
-            style="width: auto;"
+            style="width: 50px;"
+            @keydown.up="modifier++"
+            @keydown.down="modifier--"
           ></b-form-input>
         </b-form-group>
       </div>
@@ -49,11 +55,13 @@
             <b-form-input
               v-model="singleMod[index]"
               :formatter="modifierFormat"
-              type="number"
-              max="10"
-              min="-10"
+              type="text"
+              onclick="this.select()"
               placeholder="0"
-              style="width: auto;"
+              style="width: 50px;"
+              @keydown.up="increaseModifier(index)"
+              @keydown.down="decreaseModifier(index)"
+              @keydown.enter="updateResults(singleMod)"
             ></b-form-input>
           </div>
         </div>
@@ -172,6 +180,7 @@ export default {
       "characters",
       "activeCharacters",
       "rolls",
+      "rollsAsString",
       "results",
       "filteredResults"
     ]),
@@ -197,6 +206,7 @@ export default {
       for (let i = 0; i < this.singleMod.length; i++) {
         this.singleMod[i] = val;
       }
+      this.updateResults(this.singleMod);
     }
   },
   mounted() {
@@ -206,8 +216,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions("characters", ["rollDice"]),
+    ...mapActions("characters", ["rollDice", "addRolls", "updateResults"]),
     modifierFormat(value) {
+      if (value === "-") return value;
       let rv = parseInt(value);
       if (isNaN(rv)) return 0;
       else if (rv < -10) return -10;
@@ -216,6 +227,24 @@ export default {
     },
     newRoll() {
       this.rollDice(this.singleMod);
+    },
+    increaseModifier(index) {
+      this.singleMod.splice(index, 1, ++this.singleMod[index]);
+      this.updateResults(this.singleMod);
+    },
+    decreaseModifier(index) {
+      this.singleMod.splice(index, 1, --this.singleMod[index]);
+      this.updateResults(this.singleMod);
+    },
+    changeRolls(index, event) {
+      let r = event.target.value.split(",");
+      if (r.length === 3) {
+        for (let i = 0; i < r.length; i++) {
+          r[i] = parseInt(r[i]);
+        }
+        this.rolls.splice(index, 1, r);
+      }
+      this.updateResults(this.singleMod);
     }
   }
 };

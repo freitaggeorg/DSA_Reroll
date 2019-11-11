@@ -6,6 +6,5 @@ export default [
   { name: "Fingerfertigkeit", short: "FF" },
   { name: "Gewandheit", short: "GE" },
   { name: "Konstitution", short: "KO" },
-  { name: "Körperkraft", short: "KK" },
-  { name: "Behinderung", short: "BE" }
+  { name: "Körperkraft", short: "KK" }
 ];
